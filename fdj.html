@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<style>
+			<style>
+				* {
+					padding: 0;
+					margin: 0;
+				}
+			
+				.mian {
+					width: 1050px;
+					height: 500px;
+					position: relative;
+					border: 1px solid #000000;
+					margin: 50px auto;
+				}
+			
+				.left {
+					height: 400px;
+					width: 400px;
+					float: left;
+					position: relative;
+					border: 1px solid #000000;
+				}
+			
+				.left img {
+					height: 400px;
+					width: 400px;
+					position: absolute;
+					left: 0;
+					top: 0;
+					width: 100%;
+					display: none;
+				}
+			
+				.left .active {
+					display: block;
+				}
+			
+				.right {
+					height: 400px;
+					width: 400px;
+					overflow: hidden;
+					border: 1px solid orange;
+					margin-left: 20px;
+					position: relative;
+					display: none;
+				}
+			
+				.right img {
+					
+					width: 800px;
+					height: 800px;
+					display: none;
+					position: absolute;
+					left: 0;
+					right: 0;
+				}
+			
+				.right .active {
+					display: block;
+				}
+			
+				.minImg {
+					width: 430px;
+					height: 45px;
+					position: absolute;
+					left: 0;
+					bottom: 10px;
+					display: flex;
+					justify-content: space-around;
+					align-items: center;
+				}
+			
+				.minImg img {
+					width: 50px;
+					height: 40px;
+					background-size: contain;
+				}
+			
+				.minImg .active {
+					border: 2px solid #000000;
+				}
+			
+				.mask {
+					position: absolute;
+					left: 0;
+					top: 0;
+					width: 175px;
+					height: 175px;
+					background: orange;
+					opacity: 0.4;
+					display: none;
+					cursor: pointer;
+				}
+			</style>
+			
+			
+			
+			
+		</style>
+	</head>
+	<body>
+		
+			<div class="mian">
+				<div class="left">
+					<img class="active" src="images/f4%20(4).jpg" />
+					<img src="images/f4%20(1).jpg" />
+					<img src="images/f4%20(2).jpg" />
+					<img src="images/f4%20(3).jpg" />
+					<div class="mask"></div>
+				</div>
+				<div class="right">
+					<img class="active" src="images/f8%20(1).jpg" />
+					<img src="images/f8%20(2).jpg" />
+					<img src="images/f8%20(3).jpg" />
+					<img src="images/f8%20(4).jpg" />
+				</div>
+				<div class="minImg">
+					<img src="images/fdxiao%20(1).jpg" />
+					<img src="images/fdxiao%20(2).jpg" />
+					<img src="images/fdxiao%20(3).jpg" />
+					<img src="images/fdxiao%20(4).jpg" />
+				</div>
+				
+
+			</div>
+			
+			
+		
+	</body>
+	<script>
+		var oLeft = document.querySelector('.left');
+		var oRight = document.querySelector('.right');
+		var oMinImg = document.querySelector('.minImg')
+		var activeL = document.querySelectorAll('.left img');
+		var minImg = document.querySelectorAll('.minImg img');
+		var oMask = document.querySelector('.mask');
+		var activeR = document.querySelectorAll('.right img');
+		
+		var index= 0;
+		fdj(index)
+		// 切换图片
+		for (var i = 0; i < minImg.length; i++) {
+			minImg[i].index = i;
+			//清除
+			minImg[i].onmouseenter = function() {
+				for (var i = 0; i < minImg.length; i++) {
+					var index = this.index;
+					minImg[i].classList.remove('active');
+					activeL[i].classList.remove('active');
+					activeR[i].classList.remove('active');
+				}
+				minImg[index].classList.add('active');
+				activeL[index].classList.add('active');
+				activeR[index].classList.add('active');
+				fdj(index)
+			}
+		}
+		
+		oLeft.onmouseenter = function(){
+			oMask.style.display = 'block';
+			oRight.style.display = 'block';
+		}
+		oLeft.onmouseleave = function(){
+			oMask.style.display = 'none';
+			oRight.style.display = 'none';
+		}
+		
+		
+		function fdj(index){
+			oLeft.onmousemove = function(e){
+				var ev = e || event; 
+				//初始值
+				var sX = ev.clientX;
+				var sY = ev.clientY;
+				//位移
+				var startX = sX - oLeft.offsetLeft - oMask.offsetWidth-25;
+				var startY = sY - oLeft.offsetTop - oMask.offsetHeight+35;				
+				
+				var maxL = oLeft.clientWidth - oMask.offsetWidth;
+				var maxT = oLeft.clientHeight - oMask.offsetHeight;
+				
+				// 边界判断
+				if(startX < 0){
+					startX = 0;
+				}
+				if(startY < 0){
+					startY = 0;
+				}
+				if(startX >= maxL){
+					startX = maxL;
+				}
+				if(startY >= maxT){
+					startY = maxT;
+				}
+				// 赋值
+				oMask.style.left = startX + 'px';
+				oMask.style.top = startY + 'px';
+				
+				//移动大图和oMask相反;
+				var strX = startX/(oLeft.clientWidth - oMask.clientWidth);
+				var strY = startY/(oLeft.clientHeight - oMask.clientHeight);
+				var imgT = strY*(activeR[index].clientHeight- oRight.clientHeight);var imgL = strX*(activeR[index].clientWidth- oRight.clientWidth);
+				activeR[index].style.left = -imgL + 'px';
+				activeR[index].style.top = -imgT + 'px';
+				console.log(index);
+			}
+		
+		}
+		
+		
+		
+		
+	</script>
+	
+	
+	
+</html>
